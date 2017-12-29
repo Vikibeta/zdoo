@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     common 
  * @version     $Id$
- * @link        http://www.ranzhico.com
+ * @link        http://www.zdoo.org
  */
 $lang->app = new stdclass();
 $lang->app->name = 'OA';
@@ -44,7 +44,7 @@ $lang->attend->menu->company    = 'Company|attend|company|';
 $lang->attend->menu->detail     = 'Details|attend|detail|';
 $lang->attend->menu->review     = 'Review|attend|browsereview|';
 $lang->attend->menu->stat       = 'Report|attend|stat|';
-$lang->attend->menu->settings   = array('link' => 'Settings|attend|settings|', 'alias' => 'setmanager');
+$lang->attend->menu->settings   = array('link' => 'Settings|attend|settings|', 'alias' => 'personalsettings,setmanager');
 
 if(!isset($lang->leave)) $lang->leave = new stdclass();
 $lang->leave->menu = new stdclass();

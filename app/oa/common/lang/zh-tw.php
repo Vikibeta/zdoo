@@ -44,7 +44,7 @@ $lang->attend->menu->company    = '公司考勤|attend|company|';
 $lang->attend->menu->detail     = '考勤明細|attend|detail|';
 $lang->attend->menu->review     = '補錄審核|attend|browsereview|';
 $lang->attend->menu->stat       = '統計|attend|stat|';
-$lang->attend->menu->settings   = array('link' => '設置|attend|settings|', 'alias' => 'setmanager');
+$lang->attend->menu->settings   = array('link' => '設置|attend|settings|', 'alias' => 'personalsettings,setmanager');
 
 if(!isset($lang->leave)) $lang->leave = new stdclass();
 $lang->leave->menu = new stdclass();
@@ -93,7 +93,7 @@ $lang->refund->menu->review     = '待審批|refund|browsereview|status=unreview
 $lang->refund->menu->reviewedBy = '由我審批|refund|browsereview|status=reviewed';
 $lang->refund->menu->todo       = '待報銷|refund|todo|';
 $lang->refund->menu->company    = '所有報銷|refund|company|';
-$lang->refund->menu->settings   = array('link' => '設置|refund|setreviewer|', 'alias' => 'setcategory,setmoney,setdepositor,setrefundby');
+$lang->refund->menu->settings   = array('link' => '設置|refund|setreviewer|', 'alias' => 'setcategory,setdepositor,setrefundby');
 
 if(!isset($lang->holiday)) $lang->holiday = new stdclass();
 $lang->holiday->menu = new stdclass();

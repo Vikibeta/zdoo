@@ -7,7 +7,7 @@
  * @author      Tingting Dai <daitingting@xirangit.com>
  * @package     depositor
  * @version     $Id$
- * @link        http://www.ranzhico.com
+ * @link        http://www.zdoo.org
  */
 if(!isset($lang->depositor)) $lang->depositor = new stdclass();
 $lang->depositor->common          = 'Account';
@@ -28,18 +28,19 @@ $lang->depositor->createdDate     = 'Created Date';
 $lang->depositor->editedBy        = 'Edited By';
 $lang->depositor->editedDate      = 'Edited Date';
 
-$lang->depositor->all         = 'All';
-$lang->depositor->create      = 'Create';
-$lang->depositor->browse      = 'Account';
-$lang->depositor->edit        = 'Edit';
-$lang->depositor->delete      = 'Delete';
-$lang->depositor->view        = 'View';
-$lang->depositor->forbid      = 'Disable';
-$lang->depositor->activate    = 'Activate';
-$lang->depositor->export      = 'Export';
-$lang->depositor->balance     = 'Balance';
-$lang->depositor->saveBalance = 'Save';
-$lang->depositor->detail      = 'Detail';
+$lang->depositor->all            = 'All';
+$lang->depositor->create         = 'Create';
+$lang->depositor->browse         = 'Account';
+$lang->depositor->edit           = 'Edit';
+$lang->depositor->delete         = 'Delete';
+$lang->depositor->view           = 'View';
+$lang->depositor->forbid         = 'Disable';
+$lang->depositor->activate       = 'Activate';
+$lang->depositor->export         = 'Export';
+$lang->depositor->balance        = 'Balance';
+$lang->depositor->saveBalance    = 'Save';
+$lang->depositor->detail         = 'Detail';
+$lang->depositor->disabledBrowse = 'Disabled Account';
 
 $lang->depositor->check         = 'Check';
 $lang->depositor->start         = 'Begin';

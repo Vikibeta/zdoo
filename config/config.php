@@ -126,3 +126,5 @@ if(file_exists($rightsConfig)) include $rightsConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
+
+if(!isset($config->debug)) $config->debug = true;

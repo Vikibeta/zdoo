@@ -148,7 +148,7 @@ class commonModel extends model
         $appName = '';
         if(strpos($module, '.') !== false) list($appName, $module) = explode('.', $module);
 
-        if(!commonModel::isAvailable($module)) return false;
+        if(!commonModel::isAvailable($module, $method)) return false;
 
         if($app->user->admin == 'super') return true;
 
@@ -244,10 +244,15 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function isAvailable($module)
+    public static function isAvailable($module, $method = '')
     {
         global $config, $lang;
         if(isset($lang->setting->moduleList[$module]) and strpos($config->setting->modules, $module) === false) return false;
+        if($module == 'my' and $method == 'review')
+        { 
+            if(empty($config->setting->modules)) return false;
+            if($config->setting->modules == trim('trip,egress')) return false;
+        }
         return true;
     }
 
@@ -316,7 +321,7 @@ class commonModel extends model
         if($module == 'action' and $method == 'read') return true;
         if($module == 'block') return true;
         if($module == 'notice') return true;
-        if($module == 'sso' and strpos(',auth|check|gettodolist', $method)) return true;
+        if($module == 'sso' and strpos(',auth|check|gettodolist|leaveusers', $method)) return true;
         if($module == 'attend' and strpos(',signin|signout', $method)) return true;
         if($module == 'refund' and $method == 'createtrade') return true;
         if($module == 'file'   and $method == 'read') return true;
@@ -380,7 +385,7 @@ class commonModel extends model
                 $method = 'department';
             }
 
-            if(!commonModel::isAvailable($module)) continue;
+            if(!commonModel::isAvailable($module, $method)) continue;
 
             if(strpos(',tree,setting,schema,sales,', ',' . $module . ',') != false and isset($lang->setting->menu)) 
             {
@@ -402,9 +407,13 @@ class commonModel extends model
             {
                 if(commonModel::hasPriv($module, $method))
                 {
-                    $link  = helper::createLink($module, $method, $vars);
-                    $string .= !$isMobile ? "<li$class><a href='$link'>$label</a></li>\n" : "<a$class href='$link'>$label</a>";
+                    $link = helper::createLink($module, $method, $vars);
                 }
+                else
+                {
+                    $link = self::getLinkFromSubmenu($moduleName);
+                }
+                if($link) $string .= !$isMobile ? "<li$class><a href='$link'>$label</a></li>\n" : "<a$class href='$link'>$label</a>";
             }
         }
 
@@ -567,7 +576,7 @@ class commonModel extends model
             if($module == 'my' and $method == 'order')    $hasPriv = commonModel::hasPriv('order', 'browse');
             if($module == 'my' and $method == 'contract') $hasPriv = commonModel::hasPriv('contract', 'browse');
 
-            if($module == 'my' and $method == 'review')
+            if($module == 'my' and $method == 'review' and $hasPriv)
             {
                 $hasPriv = false;
                 foreach($lang->my->review->menu as $methodName => $methodMenu)
@@ -615,6 +624,30 @@ class commonModel extends model
         $string .= '</li></ul>';
 
         return $string;
+    }
+
+    /**
+     * Get Link From Submenu.
+     * 
+     * @param  string    $menuGroup 
+     * @access public
+     * @return string
+     */
+    public static function getLinkFromSubmenu($menuGroup)
+    {
+        global $lang, $config;
+
+        if(!isset($lang->$menuGroup->menu)) return '';
+
+        foreach($lang->$menuGroup->menu as $code => $menu)
+        {
+            if(is_array($menu)) $menu = $menu['link'];
+            list($label, $moduleName, $methodName, $vars) = explode('|', $menu);
+
+            if(commonModel::hasPriv($moduleName, $methodName)) return helper::createLink($moduleName, $methodName, $vars);
+        }
+
+        return '';
     }
 
     /**
@@ -1276,6 +1309,10 @@ class commonModel extends model
         $checkByID['resume']   = ',edit,delete,';
         $checkByID['address']  = ',edit,delete,';
         if($app->appName == 'crm') $checkByID['contact'] = ',edit,delete,';
+
+        $funcName = 'check' . ucfirst($module) . 'Priv';
+        if(method_exists('extcommonModel', $funcName)) $checkByID = extcommonModel::$funcName($checkByID);
+
         foreach($checkByID as $moduleName => $methodName)
         {
             if($module == $moduleName and strpos($methodName, ",$method,") !== false)
@@ -1424,15 +1461,15 @@ class commonModel extends model
         curl_setopt($ci, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
         curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ci, CURLOPT_TIMEOUT, 30);
-        curl_setopt($ci, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($ci, CURLOPT_ENCODING, "");
-        curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ci, CURLOPT_HEADER, FALSE);
+        curl_setopt($ci, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ci, CURLOPT_ENCODING, '');
+        curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ci, CURLOPT_HEADER, false);
 
         $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
         curl_setopt($ci, CURLOPT_URL, $url);
-        curl_setopt($ci, CURLOPT_HTTPHEADER, $headers );
-        curl_setopt($ci, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ci, CURLINFO_HEADER_OUT, true);
         if(!empty($data)) 
         {
             curl_setopt($ci, CURLOPT_POST, true);

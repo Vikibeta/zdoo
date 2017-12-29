@@ -258,7 +258,7 @@ class user extends control
     {                          
         if(!empty($_POST))     
         {   
-            if(in_array(trim($this->post->account), $this->config->user->retainAccount)) $this->send(array('result' => 'fail', 'message' => array('account' => sprintf($this->lang->user->retainAccount, trim($this->post->account)))));
+            if(in_array(strtolower(trim($this->post->account)), $this->config->user->retainAccount)) $this->send(array('result' => 'fail', 'message' => array('account' => sprintf($this->lang->user->retainAccount, trim($this->post->account)))));
 
             $this->user->create();          
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError())); 
@@ -282,7 +282,11 @@ class user extends control
     {
         if($this->app->user->account == 'guest') $this->locate(inlink('login'));
         if(!$account) $account = $this->app->user->account;
-        if(!commonModel::hasPriv('user', 'edit')) die(js::locate($this->createLink('user', 'deny', "module=user&method=edit")));
+        if(!commonModel::hasPriv('user', 'edit'))
+        {
+            $account = $this->app->user->account;
+            if(!commonModel::hasPriv('user', 'editself')) die(js::locate($this->createLink('user', 'deny', "module=user&method=edit")));
+        }
 
         if(!empty($_POST))
         {
@@ -327,7 +331,7 @@ class user extends control
     public function delete($account = '')
     {
         $result = $this->user->inTheReviewProcess($account);
-        if($result!== false) 
+        if($result !== false) 
         {
             $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->user->actionError, $result)));
         }

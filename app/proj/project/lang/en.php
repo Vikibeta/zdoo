@@ -7,7 +7,7 @@
  * @author      Tingting Dai <daitingting@xirangit.com>
  * @package     project
  * @version     $Id: zh-cn.php 824 2010-05-02 15:32:06Z wwccss $
- * @link        http://www.ranzhico.com
+ * @link        http://www.zdoo.org
  */
 if(!isset($lang->project)) $lang->project = new stdclass();
 $lang->project->common     = 'Project';
@@ -69,7 +69,7 @@ $lang->project->roleList['senior']  = 'Manager';
 $lang->project->roleList['limited'] = 'Limited';
 
 $lang->project->whitelistTip        = 'Whitelist members have access to projects and tasks.';
-$lang->project->roleTip             = "Managers have all privilages; Default members cannot delete tasks; Limited members can only edit their own tasks.";
+$lang->project->roleTip             = "Managers have all privilages; Default members can not delete the unreleted tasks; Limited members can only edit their own tasks.";
 $lang->project->roleTips['senior']  = "Managers can view, edit and delete all task.";
 $lang->project->roleTips['member']  = "Default: view and edit all tasks and delete their own tasks.";
 $lang->project->roleTips['limited'] = "Limited: view and edit their own tasks.";

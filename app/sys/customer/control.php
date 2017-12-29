@@ -52,19 +52,20 @@ class customer extends control
         $this->config->customer->search['params']['area']['values']     = array('' => '') + $this->loadModel('tree')->getOptionMenu('area');
         $this->search->setSearchParams($this->config->customer->search);
 
-        $customers = $this->customer->getList($mode = $mode, $param = $param, $relation = 'client', $orderBy, $pager);
+        $customers = $this->customer->getList($mode, $param, $relation = 'client', $orderBy, $pager);
 
         $this->session->set('customerQueryCondition', $this->dao->get());
 
         /* Set allowed edit customer ID list. */
         $this->app->user->canEditCustomerIdList = ',' . implode(',', $this->customer->getCustomersSawByMe('edit', array_keys($customers))) . ',';
         
-        $this->view->title     = $this->lang->customer->list;
-        $this->view->users     = $this->loadModel('user')->getPairs();
-        $this->view->mode      = $mode;
-        $this->view->customers = $customers;
-        $this->view->pager     = $pager;
-        $this->view->orderBy   = $orderBy;
+        $this->view->title      = $this->lang->customer->list;
+        $this->view->users      = $this->loadModel('user')->getPairs();
+        $this->view->moduleMenu = $this->customer->createModuleMenu($mode, $param, $orderBy, $recTotal, $recPerPage, $pageID);
+        $this->view->mode       = $mode;
+        $this->view->customers  = $customers;
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
 
         $this->display();
     }   
@@ -388,7 +389,7 @@ class customer extends control
             if($mode == 'all')
             {
                 $customerQueryCondition = $this->session->customerQueryCondition;
-                if(strpos($customerQueryCondition, 'limit') !== false) $customerQueryCondition = substr($customerQueryCondition, 0, strpos($customerQueryCondition, 'limit'));
+                if(strpos($customerQueryCondition, 'LIMIT') !== false) $customerQueryCondition = substr($customerQueryCondition, 0, strpos($customerQueryCondition, 'LIMIT'));
                 $stmt = $this->dbh->query($customerQueryCondition);
                 while($row = $stmt->fetch()) $customers[$row->id] = $row;
             }
@@ -521,7 +522,7 @@ class customer extends control
         $this->app->loadClass('date', $static = true);
         $customerIdList = $this->loadModel('customer')->getCustomersSawByMe();
         $thisWeek       = date::getThisWeek();
-        $customers      = array();
+        $customers      = array('');
         if($account == '') $account = $this->app->user->account;
 
         $sql = $this->dao->select('c.id, c.name, c.nextDate, t.id as todo')->from(TABLE_CUSTOMER)->alias('c')

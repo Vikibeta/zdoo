@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
- * @link        http://www.ranzhico.com
+ * @link        http://www.zdoo.org
  */
 if(!isset($lang->todo)) $lang->todo = new stdclass();
 $lang->todo->common       = 'To-Do';
@@ -52,7 +52,7 @@ $lang->todo->finishedBy   = 'Finished By';
 $lang->todo->finishedDate = 'Finished On';
 $lang->todo->closedBy     = 'Closed By';
 $lang->todo->closedDate   = 'Closed On';
-$lang->todo->ranzhi       = 'Ranger';
+$lang->todo->ranzhi       = 'Zdoo';
 $lang->todo->task         = 'Tasks';
 $lang->todo->bug          = 'Bugs';
 
@@ -65,8 +65,6 @@ $lang->todo->statusList['wait']     = 'Wait';
 $lang->todo->statusList['doing']    = 'Doing';
 $lang->todo->statusList['done']     = 'Done';
 $lang->todo->statusList['closed']   = 'Closed';
-//$lang->todo->statusList['cancel']   = '已取消';
-//$lang->todo->statusList['postpone'] = '已延期';
 
 $lang->todo->priList[3] = '3';
 $lang->todo->priList[1] = '1';
@@ -79,7 +77,7 @@ $lang->todo->typeList['order']    = 'Order';
 $lang->todo->typeList['customer'] = 'Customer';
 
 $lang->todo->confirmDelete  = "Do you want to delete this To-Do?";
-$lang->todo->successMarked  = "Successfully changed.";;
+$lang->todo->successMarked  = "Successfully changed.";
 $lang->todo->thisIsPrivate  = 'This is a private todo:)';
 $lang->todo->lblDisableDate = 'Set time later.';
 $lang->todo->emptyTodo      = 'You have no To-Do scheduled today.';
@@ -96,7 +94,7 @@ $lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Undone';
 $lang->todo->periods['all']        = 'All';
 
-$this->lang->todo->batchedittips = 'The editing item is not selected';
+$lang->todo->batchedittips = 'The editing item is not selected';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, Finished by <strong>$actor</strong>');

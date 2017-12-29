@@ -249,7 +249,7 @@ class trade extends control
         $this->view->customerList  = $this->loadModel('customer')->getPairs('client', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         $this->view->traderList    = $this->customer->getPairs('provider', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         $this->view->contractList  = $this->loadModel('contract', 'crm')->getList($customerID = 0);
-        $this->view->deptList      = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList      = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted,noforbidden,noclosed');
 
         $this->display();
@@ -288,7 +288,7 @@ class trade extends control
         $this->view->traderList    = $this->customer->getPairs('provider', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         $this->view->expenseTypes  = array('' => '') + $this->loadModel('tree')->getOptionMenu('out', 0, $removeRoot = true);
         $this->view->incomeTypes   = array('' => '') + $this->loadModel('tree')->getOptionMenu('in', 0, $removeRoot = true);
-        $this->view->deptList      = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList      = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->requireTrader = $this->config->trade->settings->trader;
         $this->view->productList   = array(0 => '') + $this->loadModel('product')->getPairs();
 
@@ -356,7 +356,7 @@ class trade extends control
         $this->view->contractList  = $this->loadModel('contract', 'crm')->getList($customerID = 0);
         $this->view->tradeContract = array('' => '') + $this->loadModel('contract', 'crm')->getPairs($customerID = $trade->trader);
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted,noforbidden,noclosed');
-        $this->view->deptList      = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList      = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->depositorList = $depositorList;
         $this->view->orderList     = $orderList;
         $this->view->trade         = $trade;
@@ -441,6 +441,7 @@ class trade extends control
     public function view($tradeID = 0, $mode = '')
     {
         $trade = $this->trade->getByID($tradeID);
+        if(!$trade) $this->locate(inlink('browse', "mode=$mode"));
 
         $this->view->trade        = $trade;
         $this->view->mode         = $mode;
@@ -475,7 +476,7 @@ class trade extends control
         unset($this->lang->trade->menu);
         $this->view->title         = $this->lang->trade->transfer;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted,noforbidden');
-        $this->view->deptList      = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList      = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->depositorList = $this->loadModel('depositor', 'cash')->getList();
 
         $this->display();
@@ -514,7 +515,7 @@ class trade extends control
         $this->view->title              = $this->lang->trade->invest;
         $this->view->type               = $type;
         $this->view->users              = $this->loadModel('user')->getPairs('nodeleted,noforbidden');
-        $this->view->deptList           = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList           = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->depositorList      = $depositorList;
         $this->view->traderList         = $this->loadModel('customer')->getPairs('', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         $this->view->investCategoryList = $investCategories;
@@ -555,7 +556,7 @@ class trade extends control
         $this->view->title         = $this->lang->trade->loan;
         $this->view->type          = $type;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted,noforbidden');
-        $this->view->deptList      = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList      = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->depositorList = $depositorList;
         $this->view->traderList    = $this->loadModel('customer')->getPairs('', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         $this->view->loanList      = $loanList;
@@ -675,7 +676,7 @@ class trade extends control
         $this->view->traderList         = $this->customer->getPairs('provider', $emptyOption = true, $orderBy = 'id_desc', $limit = $this->config->customerLimit, $customerIDList);
         $this->view->expenseTypes       = array('' => '') + $this->loadModel('tree')->getOptionMenu('out', 0, $removeRoot = true);
         $this->view->incomeTypes        = array('' => '') + $this->loadModel('tree')->getOptionMenu('in', 0, $removeRoot = true);
-        $this->view->deptList           = $this->loadModel('tree')->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList           = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->productList        = array(0 => '') + $this->loadModel('product')->getPairs();
         $this->view->requireTrader      = $this->config->trade->settings->trader;
         $this->view->disabledCategories = $this->dao->select('*')->from(TABLE_CATEGORY)->where('major')->in('5,6,7,8')->fetchAll('id');
@@ -744,19 +745,16 @@ class trade extends control
         unset($this->lang->trade->typeList['invest']);
         unset($this->lang->trade->typeList['redeem']);
 
-        $customerList       = $this->loadModel('customer')->getPairs('client');
-        $traderList         = $this->customer->getPairs('provider,partner');
         $expenseTypes       = array('' => '') + $this->loadModel('tree')->getOptionMenu('out', 0, $removeRoot = true);
         $incomeTypes        = array('' => '') + $this->tree->getOptionMenu('in', 0, $removeRoot = true);
         $deptList           = $this->loadModel('tree')->getPairs(0, 'dept');
         $productList        = $this->loadModel('product')->getPairs();
-        $flipCustomers      = array_flip($customerList);
-        $flipTraders        = array_flip($traderList);
         $flipTypeList       = array_flip($this->lang->trade->typeList);
         $flipDeptList       = array_flip($deptList);
         $disabledCategories = $this->dao->select('*')->from(TABLE_CATEGORY)->where('major')->in('5,6,7,8')->fetchAll('id');
 
-        $dataList = array();
+        $traders     = array();
+        $dataList    = array();
         $existTrades = array(); 
         $i = 0;
         foreach($rows as $row)
@@ -808,9 +806,8 @@ class trade extends control
 
             if(isset($flipTypeList[$data['type']])) $data['type'] = $flipTypeList[$data['type']];
 
-
-            $matchs = $data['type'] == 'out' ? $flipTraders : ($data['type'] == 'in' ? $flipCustomers : '');
-            if($data['trader'] and $matchs and !empty($matchs[$data['trader']])) $data['trader'] = $matchs[$data['trader']];
+            /* Record trader name. */
+            if($data['trader']) $traderList[] = $data['trader'];
 
             if(!empty($data['category']) and in_array($data['type'], array('in', 'out')))
             {
@@ -857,20 +854,47 @@ class trade extends control
                 $data['type']  = 'out';
                 $data['money'] = $fee;
                 $data['desc']  = '';
-                $dataList[$i]    = $data;
+                $dataList[$i]  = $data;
             }
             $i++;
+        }
+
+        /* Get customer list. */
+        $customerIdList = $this->loadModel('customer')->getCustomersSawByMe();
+        $customers      = array();
+        if($customerIdList)
+        {
+            $customers = $this->dao->select('id, name')->from(TABLE_CUSTOMER)->where('deleted')->eq(0)->andWhere('name')->in($traders)->fetchPairs();
+            foreach($customers as $id => $name)
+            {
+                if(!isset($customerIdList[$id])) unset($customers[$id]);
+            }
+        }
+
+
+        /* Set the trader as trader id. */
+        if($customers)
+        {
+            $flipTraders = array_flip($customers);
+            foreach($dataList as $key => $data)
+            {
+                if($data['trader'] && !empty($flipTraders[$data['trader']])) $data['trader'] = $flipTraders[$data['trader']];
+            }
+        }
+        else
+        {
+            $customers = $this->customer->getPairs($relation = '', $emptyOption = false, $orderBy = 'id_desc', $limit = $this->config->customerLimit);
         }
 
         $this->view->title        = $this->lang->trade->showImport;
         $this->view->trades       = $dataList;
         $this->view->depositor    = $this->loadModel('depositor', 'cash')->getByID($depositorID);
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,nodeleted,noforbidden');
-        $this->view->customerList = $customerList;
-        $this->view->traderList   = $traderList;
+        $this->view->customerList = array('' => '') + $customers;
+        $this->view->traderList   = array('' => '') + $customers;
         $this->view->expenseTypes = $expenseTypes;
         $this->view->incomeTypes  = $incomeTypes;
-        $this->view->deptList     = $this->tree->getOptionMenu('dept', 0, $removeRoot = true);
+        $this->view->deptList     = array('') + $this->loadModel('tree')->getOptionMenu('dept', 0);
         $this->view->productList  = array(0 => '') + $productList;
         $this->view->existTrades  = $existTrades;
 
@@ -880,16 +904,21 @@ class trade extends control
     /**
      * Delete a trade.
      * 
-     * @param  int      $tradeID 
+     * @param  int    $tradeID 
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function delete($tradeID)
+    public function delete($tradeID, $mode = '')
     {
         $trade = $this->trade->getByID($tradeID);
         if($trade->type == 'out') $this->loadModel('tree')->checkRight($trade->category);
 
-        if($this->trade->delete($tradeID)) $this->send(array('result' => 'success'));
+        if($this->trade->delete($tradeID)) 
+        {
+            if($mode) $this->send(array('result' => 'success'));
+            $this->send(array('result' => 'success', 'locate' => inlink('browse')));
+        }
         $this->send(array('result' => 'fail', 'message' => dao::getError()));
     }
 
@@ -922,7 +951,7 @@ class trade extends control
             if($mode == 'all')
             {
                 $tradeQueryCondition = $this->session->tradeQueryCondition;
-                if(strpos($tradeQueryCondition, 'limit') !== false) $tradeQueryCondition = substr($tradeQueryCondition, 0, strpos($tradeQueryCondition, 'limit'));
+                if(strpos($tradeQueryCondition, 'LIMIT') !== false) $tradeQueryCondition = substr($tradeQueryCondition, 0, strpos($tradeQueryCondition, 'LIMIT'));
                 $stmt = $this->dbh->query($tradeQueryCondition);
                 while($row = $stmt->fetch()) $trades[$row->id] = $row;
             }

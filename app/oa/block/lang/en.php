@@ -7,7 +7,7 @@
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block 
  * @version     $Id$
- * @link        http://www.ranzhico.com
+ * @link        http://www.zdoo.org
  */
 $lang->block->common   = 'Blocks';
 $lang->block->announce = 'Announce';
@@ -29,4 +29,4 @@ $lang->block->asc     = 'ASC';
 $lang->block->desc    = 'DESC';
 $lang->block->actions = 'Options';
 
-$lang->block->orderByList = new stdclass();;
+$lang->block->orderByList = new stdclass();

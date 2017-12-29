@@ -509,7 +509,7 @@ class overtime extends control
             if($mode == 'all')
             {
                 $overtimeQueryCondition = $this->session->overtimeQueryCondition;
-                if(strpos($overtimeQueryCondition, 'limit') !== false) $overtimeQueryCondition = substr($overtimeQueryCondition, 0, strpos($overtimeQueryCondition, 'limit'));
+                if(strpos($overtimeQueryCondition, 'LIMIT') !== false) $overtimeQueryCondition = substr($overtimeQueryCondition, 0, strpos($overtimeQueryCondition, 'LIMIT'));
                 $stmt = $this->dbh->query($overtimeQueryCondition);
                 while($row = $stmt->fetch()) $overtimes[$row->id] = $row;
             }
@@ -521,8 +521,8 @@ class overtime extends control
 
             foreach($overtimes as $overtime)
             {
-                $overtime->createdBy  = zget($userPairs, $overtime->createdBy);
                 $overtime->dept       = zget($userDepts, $overtime->createdBy);
+                $overtime->createdBy  = zget($userPairs, $overtime->createdBy);
                 $overtime->type       = zget($this->lang->overtime->typeList, $overtime->type);
                 $overtime->begin      = $overtime->begin . ' ' . $overtime->start;
                 $overtime->end        = $overtime->end   . ' ' . $overtime->finish;

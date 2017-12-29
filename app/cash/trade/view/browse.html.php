@@ -89,11 +89,11 @@
         <?php foreach($trades as $trade):?>
         <tr class='text-center'>
           <td>
-          <?php if($batchEdit):?>
-          <label class='checkbox-inline'><input type='checkbox' name='tradeIDList[]' value='<?php echo $trade->id;?>'/> <?php echo formatTime($trade->date, DT_DATE1);?></label>
-          <?php else:?>
-          <?php echo formatTime($trade->date, DT_DATE1);?>
-          <?php endif;?>
+            <?php if($batchEdit):?>
+            <label class='checkbox-inline'><input type='checkbox' name='tradeIDList[]' value='<?php echo $trade->id;?>'/> <?php echo formatTime($trade->date, DT_DATE1);?></label>
+            <?php else:?>
+            <?php echo formatTime($trade->date, DT_DATE1);?>
+            <?php endif;?>
           </td>
           <td class='text-left'><?php echo zget($depositorList, $trade->depositor, ' ');?></td>
           <td><?php echo $lang->trade->typeList[$trade->type];?></td>
@@ -120,7 +120,7 @@
             <?php commonModel::printLink('trade', 'view', "tradeID={$trade->id}&mode={$mode}", $lang->view);?>
             <?php commonModel::printLink('trade', 'edit', "tradeID={$trade->id}&mode={$mode}", $lang->edit);?>
             <?php commonModel::printLink('trade', 'detail', "tradeID={$trade->id}&mode={$mode}", $lang->trade->detail, "data-toggle='modal'");?>
-            <?php commonModel::printLink('trade', 'delete', "tradeID={$trade->id}", $lang->delete, "class='deleter'");?>
+            <?php commonModel::printLink('trade', 'delete', "tradeID={$trade->id}&mode={$mode}", $lang->delete, "class='deleter'");?>
           </td>
         </tr>
         <?php endforeach;?>
